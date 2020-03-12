@@ -1,5 +1,5 @@
 # NODOZE
-Make corporate macs listen to your DisplaySleep setting.  Fight the power!
+Make corporate macs listen to your DisplaySleep setting.
 
 ## Install
 
