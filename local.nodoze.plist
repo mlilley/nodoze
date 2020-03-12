@@ -7,14 +7,14 @@
     <key>ProgramArguments</key>
     <array>
       <string>/path/to/nodoze</string>
-      <string>600</string><!-- job interval (600 = every 10 minutes) -->
+      <string>180</string><!-- displaysleep value in minutes (180 = sleep after 3 hours) -->
       <string>2>&1</string>
       <string>|</string>
       <string>ts</string>
       <string>'%F %T'</string>
     </array>
     <key>StartInterval</key>
-    <integer>600</integer>
+    <integer>600</integer><!-- job interval in seconds (600 = run every 10 minutes -->
     <key>StandardOutPath</key>
     <string>/path/to/nodoze.log</string>
     <key>StandardErrorPath</key>
