@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>local.nodoze</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Users/mlilley/bin2/nodoze</string>
+      <string>600</string><!-- job interval (600 = every 10 minutes) -->
+      <string>2>&1</string>
+      <string>|</string>
+      <string>ts</string>
+      <string>'%F %T'</string>
+    </array>
+    <key>StartInterval</key>
+    <integer>600</integer>
+    <key>StandardOutPath</key>
+    <string>/Users/mlilley/bin2/nodoze.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/mlilley/bin2/nodoze.log</string>
+  </dict>
+</plist>

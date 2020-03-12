@@ -1,0 +1,50 @@
+#!/bin/bash
+
+err() {
+  echo "error: $*" >> /dev/stderr
+}
+
+if [ "$EUID" -ne 0 ]; then
+  err "must be root"
+  exit 1
+fi 
+
+if [[ -z "$1" || "$1" == "--help" ]]; then
+  echo "Useage: nodoze N"
+  echo "  N - value to apply to macos 'displaysleep' config (number in range 1 to 180, or 'Never')"
+  echo "ex: nodoze 180"
+  echo "ex: nodoze Never"
+  exit
+fi
+
+input=`printf '%s\n' "$1" | awk '{ print toupper($0) }'`
+regexnum='[0-9]+'
+
+if [[ $input == "NEVER" || $input == "0" ]]; then
+  wantval="Never"
+elif [[ $input =~ $regexnum && $input -ge 1 && $input -le 180 ]]; then
+  wantval="$input"
+else
+  err "value invalid (must be number in range 1 to 180 or \"Never\")"
+  exit 1
+fi
+
+cursleep=`systemsetup -getdisplaysleep`
+cursleepval=`echo "$cursleep" | sed 's/Display Sleep: //' | sed 's/after //' | sed 's/ minutes//'`
+
+if [[ $cursleepval -ne "Never" && ! $cursleepval =~ $regexnum ]]; then
+  err "unable to parse current displaysleep '$cursleep'"
+  exit 1
+fi 
+
+if [[ "$cursleepval" == "$wantval" ]]; then
+  echo "current sleepval is $cursleepval -> nothing to do"
+else 
+  echo "current sleepval is $cursleepval -> adjusting to $wantval"
+  res=`systemsetup -setdisplaysleep $wantval`
+  res=${res/$'warning: this combination of display sleep and system sleep may prevent system sleep.\n'/}
+  if ! [[ "$res" == "setdisplaysleep: $wantval" ]]; then
+    err "unexpected result setting displaysleep '$res' -> displaysleep may not have been adjusted"
+    exit 1
+  fi
+fi
